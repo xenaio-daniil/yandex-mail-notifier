@@ -21,12 +21,18 @@ function setMailsCount(count) {
     chrome.action.setIcon({
         path: "/button/img/mail.png"
     });
-
-    chrome.action.setBadgeText({
-        text: count.toString()
-    });
-    chrome.action.setBadgeBackgroundColor({color: "#94ACDB"});
-    chrome.action.setBadgeTextColor({color: "#202124"})
+    if(count > 0) {
+        chrome.action.setBadgeText({
+            text: count.toString()
+        });
+        chrome.action.setBadgeBackgroundColor({color: "#94ACDB"});
+        chrome.action.setBadgeTextColor({color: "#202124"})
+    }
+    else{
+        chrome.action.setBadgeText({
+            text:''
+        })
+    }
 }
 
 export default {
