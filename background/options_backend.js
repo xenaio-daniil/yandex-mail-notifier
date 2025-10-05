@@ -82,6 +82,5 @@ export function listenToOption() {
             default:
                 break;
         }
-        return true;
     })
 }
