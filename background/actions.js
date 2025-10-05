@@ -142,9 +142,12 @@ export async function healthCheck() {
     });
 }
 
+export function addListeners() {
+    listenToPopup();
+    listenToOption();
+}
+
 export async function initialize() {
     await Settings.initSettings();
     healthCheck();
-    listenToPopup();
-    listenToOption();
 }
