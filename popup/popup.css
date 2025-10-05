@@ -1,0 +1,278 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 0;
+
+}
+
+body {
+    width: 700px;
+    max-height: 418px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 10px;
+}
+
+button {
+    appearance: none;
+    background: transparent;
+    border: none;
+    display: flex;
+    border-radius: 2px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #EDEDED;
+}
+
+button#compose {
+    align-items: center;
+    gap: 10px;
+}
+
+[data-mode=spinner] .spinner {
+    --height: 71px;
+    --size: 30px;
+    --border-width: 4px;
+    --speed: 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 71px;
+}
+
+.spinner::before {
+    content: '';
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    border: var(--border-width) solid transparent;
+    border-right-color: #ffdb63;
+    animation: spinner var(--speed) infinite linear;
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+.mail-list__header {
+    padding: 8px 10px 9px 10px;
+    border-bottom: 3px solid #FFDB63;
+    display: flex;
+    align-items: stretch;
+}
+
+[data-mode=authorized] .unauthorized {
+    display: none;
+}
+
+[data-mode=unauthorized] .authorized {
+    display: none;
+}
+
+.current-mailbox__container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#open-mailbox {
+    gap: 10px;
+}
+
+.mail-list__menu {
+    align-self: center;
+}
+
+#mail-list__menu-button {
+    gap: 10px;
+    align-items: center;
+}
+
+.current-mailbox__unreaded, .total-mailbox__unreaded, .account-mailbox__unreaded {
+    color: #808080;
+}
+
+.menu-button__image {
+    width: 13px;
+}
+
+.message-item {
+    list-style: none;
+    padding: 10px 20px;
+    position: relative;
+    display: flex;
+}
+
+.message-item:hover {
+    background: #EDEDED;
+}
+
+[data-mode="message-list"] .message-list {
+    display: block;
+    overflow: auto;
+    scrollbar-color: #8B8B8B5f transparent;
+    scrollbar-arrow-color: transparent;
+}
+
+.message-list::-webkit-scrollbar {
+    background: #8B8B8B5f;
+}
+
+.message-list__item {
+    cursor: pointer;
+    overflow: hidden;
+    flex: 1;
+}
+
+.message-item p {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.message-text {
+    color: #808080;
+}
+
+.message-attachments {
+    display: none;
+}
+
+.with-attachments .message-attachments {
+    display: block;
+}
+
+.message-date {
+    color: #bbbbbb;
+    margin-left: 5px;
+}
+
+.message-header {
+    display: flex;
+    gap: 5px;
+}
+
+.message-from {
+    font-weight: bold;
+}
+
+.message-buttons {
+    display: none;
+    align-items: center;
+}
+
+.message-item:hover .message-buttons {
+    display: flex;
+}
+
+.message-button__element {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.message-button__element:hover {
+    color: #ff0000;
+    text-decoration: underline;
+}
+
+[data-mode=message] .message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 18px;
+    padding: 10px 20px;
+}
+
+.message-content {
+    padding: 2em 0;
+}
+
+.content-block {
+    display: none;
+}
+
+[data-mode="accounts-list"] .accounts {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.accounts-list {
+    display: table;
+    align-self: center;
+    margin: 10px 20px;
+    border-spacing: 10px 5px;
+    border-collapse: separate;
+}
+
+.account-mailbox__unreaded {
+    cursor: default;
+}
+
+.accounts-list .logout-account {
+    color: #808080;
+    font-size: 0.9em;
+}
+
+.account-item._current {
+    position: relative;
+}
+
+.account-item._current .select-account:before {
+    content: '\23F5';
+    position: absolute;
+    top: calc(50% - 3px);
+    left: -17px;
+    transform: translate(0, -50%);
+    font-weight: bold;
+    color: #ef4747;
+    font-size: 1.5em;
+}
+
+.logout-account:hover{
+    background: #ffe1e1;
+    color: #ef4747;
+}
+
+.accounts-links{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+
+.accounts-links button{
+    text-align: center;
+    justify-content: center;
+}
+
+.logout-account:hover{
+    background: #ffe1e1;
+    color: #ef4747;
+}
+
+#logout-total{
+    color: #ef4747;
+}
+#logout-total:hover{
+    background: #ffe1e1;
+}

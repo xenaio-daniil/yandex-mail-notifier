@@ -1,0 +1,11 @@
+{
+   "description": {
+      "message": "Get new message notifications and quick access to Yandex.Mail."
+   },
+   "locale": {
+      "message": "en"
+   },
+   "name": {
+      "message": "Yandex Elements: Mail"
+   }
+}

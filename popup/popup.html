@@ -1,0 +1,44 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body data-mode="spinner">
+<header class="mail-list__header authorized">
+    <button id="compose"><img src="icons/header/mail-create.png">Написать</button>
+    <div class="current-mailbox__container">
+        <button id="open-mailbox"><span class="current-mailbox__name"></span><span
+                class="current-mailbox__unreaded"></span></button>
+        <button id="refresh"><img src="icons/header/mail-refresh.png" alt="Обновить" title="Обновить"></button>
+    </div>
+    <div class="mail-list__menu">
+        <button id="mail-list__menu-button"><span class="total-mailbox__unreaded"></span><img
+                src="icons/header/ico-settings.png" alt="Меню" title="Меню" class="menu-button__image"></button>
+    </div>
+</header>
+<section class="content-block message-list">
+    <ul class="mails">
+
+    </ul>
+</section>
+<div class="content-block spinner">
+
+</div>
+<div class="content-block message">
+    <span class="message-content"></span>
+    <button id="inline-refresh">Обновить</button>
+</div>
+<div class="content-block accounts">
+    <table class="accounts-list">
+
+    </table>
+    <div class="accounts-links">
+        <button id="settings">Настройки виджета</button>
+        <button id="login-new">Войти в другой почтовый ящик</button>
+        <button id="logout-current">Выйти</button>
+    </div>
+</div>
+</body>
+<script src="popup.js"></script>
+<script src="actions.js"></script>
+</html>

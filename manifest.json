@@ -1,0 +1,37 @@
+{
+  "name": "__MSG_name__",
+  "description": "__MSG_description__",
+  "default_locale": "ru",
+  "version": "9.0",
+  "manifest_version": 3,
+  "icons": {
+    "128": "logo/chrome/mail_128.png",
+    "16": "logo/chrome/ya_16_ru.png",
+    "48": "logo/chrome/mail_48.png"
+  },
+  "action": {
+  },
+  "options_page": "/options/options.html",
+  "permissions": [
+    "alarms",
+    "storage",
+    "notifications",
+    "offscreen",
+    "cookies"
+  ],
+  "host_permissions": [
+    "https://mail.yandex.ru/*",
+    "https://*.yandex.ru/*",
+    "https://yandex.ru/*"
+  ],
+  "background":{
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["offscreen/offscreen.html", "offscreen/offscreen.js", "audio/message.mp3", "popup/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

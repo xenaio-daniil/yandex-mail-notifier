@@ -1,0 +1,11 @@
+{
+   "description": {
+      "message": "Yeni e-postalarla ilgili bildirimler ve Yandex.Mail’e hızlı erişim."
+   },
+   "locale": {
+      "message": "tr"
+   },
+   "name": {
+      "message": "Yandex Elements: Mail"
+   }
+}

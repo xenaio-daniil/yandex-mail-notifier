@@ -1,0 +1,113 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    font-size: 100%;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.header{
+    padding: 20px 10px;
+    font-size: 2em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.logo{
+    height: 1.5em;
+    overflow: hidden;
+}
+
+.settings{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 10px;
+    border-top: 6px solid #FFDB63;
+}
+
+.input-group{
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.checkbox{
+    --width: 80px;
+    --height: 28px;
+    display: inline-block;
+    position: relative;
+    width: var(--width);
+    height: var(--height);
+    border-radius: 3px;
+    background: #848484;
+    transition: background-color 0.3s cubic-bezier(0, 1, 0.5, 1);
+    cursor: pointer;
+}
+
+.checkbox:before{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    content: attr(text-on);
+    left: calc(var(--width) / 4 * 3);
+    color: rgba(255,255,255, 0.7);
+}
+
+.checkbox:after{
+    background: #ffffff;
+    border-radius: 2px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: calc((var(--width) - 2px) / 2);
+    height: calc(var(--height) - 2px);
+    top: 1px;
+    transition: 0.3s cubic-bezier(0, 1, 0.5, 1);
+
+    content: attr(text-off);
+    left: 1px;
+    color: #848484;
+}
+
+input:checked ~ .checkbox{
+    background: #4973b3;
+}
+
+input:checked ~ .checkbox:before{
+    content: attr(text-off);
+    left: calc(var(--width) / 4);
+    color: rgba(255,255,255, 0.7);
+}
+
+input:checked ~ .checkbox:after{
+    content: attr(text-on);
+    left: calc(var(--width) / 2);
+    color: #4973b3;
+}
+
+.copyright{
+    border-top: 2px solid #cdcdcd;
+    padding: 10px;
+    font-size: 0.7em;
+}
