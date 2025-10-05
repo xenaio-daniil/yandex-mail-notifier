@@ -8,10 +8,11 @@ class Settings{
         "allAccountsCounter": true,
         "openPortal": false
     };
+    __settings;
 
     constructor() {
         listenToOption()
-        this.__settings = {};
+        this.__settings = null;
     }
 
     async initSettings() {
@@ -30,8 +31,8 @@ class Settings{
     }
 
     async getSettings(setting){
-        if(Object.values(this.__settings).length === 0 || (setting && !(setting in this.__settings))) {
-            this.__settings = this.__settings ?? Object.assign({}, Settings.defaultSettings, await chrome.storage.local.get("settings").settings, this.__settings);
+        if(!this.__settings || Object.values(this.__settings).length === 0 || (setting && !(setting in this.__settings))) {
+            this.__settings = Object.assign({}, Settings.defaultSettings, await chrome.storage.local.get("settings").settings, this.__settings);
             chrome.storage.local.set({settings: this.__settings});
         }
         if(setting){
