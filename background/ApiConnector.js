@@ -1,6 +1,6 @@
 import {UnauthorizedError} from './errors/Unauthorized.js';
 import {NoInternetError} from './errors/NoInternet.js';
-import offscreenManager from "./offscreenManager.js";
+import accounts from "./accounts.js";
 
 const COUNTER_URI = 'https://mail.yandex.ru/api/v2/bar/counters?silent&multi';
 const ACCOUNT_LIST_URI = 'https://api.passport.yandex.ru/accounts'
@@ -33,6 +33,8 @@ export default {
             }
 
             const data = await response.json();
+
+            await accounts.syncByUID(data.map(item=>item.uid));
 
             return data;
 

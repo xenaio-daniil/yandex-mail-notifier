@@ -192,8 +192,7 @@ function updateMessages(messageTextData) {
     const messages_list = document.querySelector(".mails");
     messages_list.innerHTML = "";
     if(messages.length === 0){
-        document.querySelector(".message-content").textContent = "Новых писем нет";
-        document.body.setAttribute("data-mode", "message");
+        showWarning("Новых писем нет", 1);
     }
     else {
         for (let message of messages) {
@@ -218,6 +217,22 @@ function accountChanged() {
     accounts = {};
     counters = {};
     loadHeaderInfo()
+}
+
+function showWarning(message, withRefresh) {
+    document.body.setAttribute("data-mode","message");
+    document.querySelector(".message-content").textContent = message;
+    switch(withRefresh){
+        case 1:
+            document.querySelector(".message").setAttribute("data-mode", "inline-refresh");
+            break;
+        case 2:
+            document.querySelector(".message").setAttribute("data-mode", "total-refresh");
+            break;
+        default:
+            document.querySelector(".message").setAttribute("data-mode", "no-refresh");
+            break;
+    }
 }
 
 function createBackgroundListener() {
@@ -256,6 +271,11 @@ function createBackgroundListener() {
                 if(message.data.uid === currentAccount.uid){
                     loadMessages();
                 }
+                break;
+            case "showWarning":
+                console.log(message);
+                showWarning(message.data.message, message.data.showRefresh)
+                break;
         }
     })
 }

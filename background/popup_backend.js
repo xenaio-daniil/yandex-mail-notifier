@@ -2,12 +2,13 @@ import Accounts from "./accounts.js";
 import ApiConnector from "./ApiConnector.js";
 import * as actions from "./actions.js";
 import {openMessage} from "./actions.js";
-import {UnauthorizedError} from "./errors/Unauthorized.js";
+import * as State_controller from "./state_controller.js";
+import State from "./state_controller.js";
 
 class Popup {
 
 
-    async sendMessage(action, data){
+    async sendMessage(action, data) {
         return chrome.runtime.sendMessage({
             action: action,
             target: "popup",
@@ -15,6 +16,7 @@ class Popup {
         }).catch(() => {
         })
     }
+
     accountChanged() {
         chrome.runtime.sendMessage({
             'action': "accountChanged",
@@ -23,22 +25,45 @@ class Popup {
         })
     }
 
-    loadAccountData(){
+    showStateMessage(message, showRefresh){
+        chrome.runtime.sendMessage({
+            'action':"showWarning",
+            'target': 'popup',
+            'data': {
+                message: message,
+                showRefresh: showRefresh
+            }
+        })
+    }
+
+    loadAccountData() {
         Accounts.loadAccounts()
-            .then(accounts=>this.sendMessage("loadAccountData", accounts)).catch(e=>actions.openLoginPage())
+            .then(accounts => this.sendMessage("loadAccountData", accounts)).catch(e => {
+            if (State.getState() === State_controller.STATE_OFFLINE){
+                this.showStateMessage(State.getHumanMessage(State.getState()), 2);
+                return
+            }
+            actions.openLoginPage()
+        })
     }
 
     fetchCounters() {
         ApiConnector.fetchCounters()
-            .then(counters => this.sendMessage("loadCounters", counters)).catch(e=>actions.openLoginPage())
+            .then(counters => this.sendMessage("loadCounters", counters)).catch(e => {
+            if (State.getState() === State_controller.STATE_OFFLINE){
+                this.showStateMessage(State.getHumanMessage(State.getState()), 2);
+                return
+            }
+            actions.openLoginPage()
+        })
     }
 
     loadMessages() {
         ApiConnector.loadMessagesAsText()
-            .then(messagesAsText=> this.sendMessage("loadMessages", messagesAsText));
+            .then(messagesAsText => this.sendMessage("loadMessages", messagesAsText));
     }
 
-    readMessage(uid, mids){
+    readMessage(uid, mids) {
         this.fetchCounters();
         this.sendMessage('markReadMessage', {
             uid: uid,
@@ -46,13 +71,14 @@ class Popup {
         })
     }
 
-    unreadMessage(uid, mids){
+    unreadMessage(uid, mids) {
         this.fetchCounters();
         this.sendMessage('markNewMessage', {
-            uid:uid
+            uid: uid
         });
     }
 }
+
 const popup = new Popup()
 export default popup;
 
@@ -79,17 +105,17 @@ export function listenToPopup() {
                 Accounts.logout(message.data.uid);
                 break;
             case "markRead":
-                actions.markReaded(message.data.uid, message.data.mid).then((result)=>sendResponse(result))
+                actions.markReaded(message.data.uid, message.data.mid).then((result) => sendResponse(result))
                 break;
             case "markSpam":
-                actions.markSpam(message.data.uid, message.data.mid).then((result)=>sendResponse(result))
+                actions.markSpam(message.data.uid, message.data.mid).then((result) => sendResponse(result))
                 break;
             case "delete":
-                actions.deleteMessage(message.data.uid, message.data.mid).then((result)=>sendResponse(result))
+                actions.deleteMessage(message.data.uid, message.data.mid).then((result) => sendResponse(result))
                 break;
             case "reply":
                 actions.markReaded(message.data.uid, message.data.mid)
-                chrome.tabs.create({"url":"https://mail.yandex.ru/?uid="+message.data.uid+"#compose?origin=elmt_mailchrome&oper=reply&ids="+message.data.mid})
+                chrome.tabs.create({"url": "https://mail.yandex.ru/?uid=" + message.data.uid + "#compose?origin=elmt_mailchrome&oper=reply&ids=" + message.data.mid})
                 break;
             case "openSettings":
                 chrome.runtime.openOptionsPage();

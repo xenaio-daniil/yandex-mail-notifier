@@ -207,6 +207,18 @@ button#compose {
     padding: 2em 0;
 }
 
+.message-refresh{
+    display: none;
+}
+
+.message[data-mode="inline-refresh"] #inline-refresh{
+    display: flex;
+}
+
+.message[data-mode="total-refresh"] #total-refresh{
+    display: flex;
+}
+
 .content-block {
     display: none;
 }

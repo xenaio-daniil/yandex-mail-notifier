@@ -50,6 +50,9 @@ document.body.addEventListener('click', (e) => {
     if(e.target.closest("#refresh") || e.target.closest("#inline-refresh")){
         loadMessages();
     }
+    if(e.target.closest("#total-refresh")){
+        loadHeaderInfo();
+    }
     if(e.target.closest("#settings")){
         openSettings();
     }

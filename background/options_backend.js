@@ -46,7 +46,6 @@ class Settings{
     applyNewSettings(setting) {
         if(!setting){
             this.applyOpenPortal()
-            this.applyOpenPortal()
         }
         switch(setting){
             case "allAccountsCounter":

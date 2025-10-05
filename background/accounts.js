@@ -1,5 +1,6 @@
 import apiConnector from "./ApiConnector.js";
 import offscreenManager from "./offscreenManager.js";
+import events from "./events.js";
 
 let cKey = null;
 
@@ -37,6 +38,25 @@ class Accounts{
         chrome.storage.local.set({"accounts": accounts})
         return accounts;
     }
+
+    async dropAccounts(uids){
+        const data = await chrome.storage.local.get(["accounts"]);
+        const accounts = data.accounts;
+        if(!accounts) return;
+        for(let uid of uids){
+            delete accounts[uid];
+        }
+        await chrome.storage.local.set({accounts: accounts});
+    }
+
+    async dropTokens(uids){
+        let tokens = (await chrome.storage.local.get("accessTokens")).accessTokens;
+        for(let uid of uids){
+            delete tokens[uid];
+        }
+        await chrome.storage.local.set({accessTokens: tokens})
+    }
+
     async getToken(uid) {
         let tokens = (await chrome.storage.local.get("accessTokens")).accessTokens;
         if (!tokens) {
@@ -95,6 +115,25 @@ class Accounts{
             cKey = result[0].content;
         }
         return cKey;
+    }
+
+    async syncByUID(uids){
+        const account_information = await this.getLocalAccounts();
+        const currentUIDs = Object.keys(account_information);
+        const inactiveAccounts = currentUIDs.filter(uid => !uids.includes(uid))
+        const doesNotHaveActiveAccounts = uids.filter(uid => !currentUIDs.includes(uid)).length !== 0
+        if(inactiveAccounts.length > 0){
+            await this.dropAccounts(inactiveAccounts);
+            await this.dropTokens(inactiveAccounts)
+        }
+        else if(doesNotHaveActiveAccounts){
+
+        }
+        else{
+            return;
+        }
+        events.accountChanged.trigger();
+        return false;
     }
 }
 

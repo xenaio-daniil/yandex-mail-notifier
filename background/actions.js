@@ -4,11 +4,9 @@ import apiConnector from "./ApiConnector.js";
 import visual from "./visual.js";
 import Accounts from "./accounts.js";
 import WebSocketConnection from "./WebSocketConnection.js";
-import {listenToPopup} from "./popup_backend.js";
-import {listenToOption} from "./options_backend.js";
-import Settings from "./options_backend.js"
-
-const __UPDATE_TIMER__ = 35
+import Settings from "./options_backend.js";
+import * as StateController from "./state_controller.js";
+import State from "./state_controller.js";
 
 export function openLoginPage() {
     chrome.tabs.create({"url":"https://passport.yandex.ru/auth?retpath=https%3A%2F%2Fmail.yandex.ru"});
@@ -52,15 +50,16 @@ export async function fetchYandexMailCounters() {
         else{
             totalMessages = await getCurrentCount();
         }
+
         visual.setMailsCount(totalMessages);
+        State.setState(StateController.STATE_CONNECTED);
     } catch (e) {
         if (e instanceof UnauthorizedError) {
-            visual.setUnauthorized();
+            State.setUnauthorized();
         }
         if (e instanceof NoInternetError) {
-            visual.setNoInternet()
+            State.setOffline()
         }
-        return;
     }
 }
 
@@ -98,7 +97,10 @@ const connections = {};
 function breakOldConnections(accounts, connections) {
     const oldUIDs = Object.keys(connections).filter(uid=>!Object.keys(accounts).includes(uid))
     for(let uid of oldUIDs){
-        connections[uid].connection.close();
+        const connection = connections[uid].connection;
+        if(connection){
+            connection.close();
+        }
     }
 }
 
@@ -106,16 +108,17 @@ export async function checkConnections() {
     let accounts = await Accounts.getLocalAccounts();
     breakOldConnections(accounts, connections)
     if (Object.values(accounts).length === 0) {
-        visual.setUnauthorized();
-
+        State.setUnauthorized()
     }
     else {
-        for (let uid in accounts) {
-            if (!(uid in connections)) {
-                connections[uid] = new WebSocketConnection(uid)
-            }
-            if (!connections[uid].connected) {
-                connections[uid].connect();
+        if(State.getState() === StateController.STATE_CONNECTED) {
+            for (let uid in accounts) {
+                if (!(uid in connections)) {
+                    connections[uid] = new WebSocketConnection(uid)
+                }
+                if (!connections[uid].connected) {
+                    connections[uid].connect();
+                }
             }
         }
     }
@@ -123,31 +126,11 @@ export async function checkConnections() {
     return true;
 }
 
-export function createAlarm() {
-    chrome.alarms.clear('yandexMailCheck', () => {
-        chrome.alarms.create('yandexMailCheck', {
-            periodInMinutes: __UPDATE_TIMER__ / 60
-        });
-    });
-}
-
-export function clearAlarm(){
-    chrome.alarms.clear('yandexMailCheck');
-}
-
 export async function healthCheck() {
-    checkConnections().then((isAuthenticated) => {
-        isAuthenticated ? fetchYandexMailCounters() : '';
-        isAuthenticated ? createAlarm(): clearAlarm();
-    });
-}
-
-export function addListeners() {
-    listenToPopup();
-    listenToOption();
+    fetchYandexMailCounters().then(()=>checkConnections())
 }
 
 export async function initialize() {
     await Settings.initSettings();
-    healthCheck();
+    State.setState(StateController.STATE_OFFLINE);
 }
