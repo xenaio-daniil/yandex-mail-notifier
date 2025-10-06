@@ -24,6 +24,28 @@ function parseValueFromInput(input) {
     }
 }
 
+async function applyFeature(feature, value) {
+    console.log(feature, value);
+    switch (feature) {
+        case "mailtoHook":
+            if(value === "on"){
+                navigator.registerProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s');
+            }
+            else{
+                navigator.unregisterProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s')
+            }
+            break;
+    }
+}
+
+document.querySelector(".settings").addEventListener("click", (e)=>{
+    if(e.target.closest(".feature-activation-button")){
+        e.preventDefault();
+        const button = e.target.closest(".feature-activation-button")
+        applyFeature(button.getAttribute("feature"), button.getAttribute("action"))
+    }
+})
+
 document.querySelector(".settings").addEventListener("change", (e)=>{
     let value;
     const input = e.target.closest("input, select, textarea");

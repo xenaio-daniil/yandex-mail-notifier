@@ -4,7 +4,6 @@ class Settings{
     static defaultSettings = {
         "notifications": true,
         "playSound": true,
-        // "mailtoHook": true,
         "allAccountsCounter": true,
         "openPortal": false
     };
@@ -12,34 +11,30 @@ class Settings{
 
     constructor() {
         listenToOption()
-        this.__settings = null;
     }
 
     async initSettings() {
         const settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings);
         chrome.storage.local.set({"settings": settings})
-        this.__settings = settings;
         this.applyNewSettings()
     }
 
     async update(setting, value){
-        if(!(setting in this.__settings)) return;
-        this.__settings[setting] = value;
+        const settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings);
+        if(!(setting in settings)) return;
 
-        chrome.storage.local.set({"settings": this.__settings})
+        chrome.storage.local.set({"settings": settings})
         this.applyNewSettings(setting)
     }
 
     async getSettings(setting){
-        if(!this.__settings || Object.values(this.__settings).length === 0 || (setting && !(setting in this.__settings))) {
-            this.__settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings, this.__settings);
-            chrome.storage.local.set({settings: this.__settings});
-        }
+        const settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings);
+        chrome.storage.local.set({settings: this.__settings});
         if(setting){
-            return this.__settings[setting];
+            return settings[setting];
         }
         else{
-            return this.__settings
+            return settings;
         }
     }
 

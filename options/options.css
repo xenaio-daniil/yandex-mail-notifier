@@ -49,6 +49,42 @@ body{
     gap: 0.5em;
 }
 
+.input-group[data-help]{
+    position: relative;
+    width: max-content;
+}
+
+.input-group[data-help]:before{
+    content: '?';
+    background: #A3B9D5;
+    width: 26px;
+    padding-top: 2px;
+    height: 24px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    font-weight: bold;
+    color: #ffffff;
+    box-shadow: 1px 1px 3px #0000005c;
+    cursor: pointer;
+    order: 1;
+}
+
+.input-group[data-help]:hover:after {
+    content: attr(data-help);
+    position: absolute;
+    width: 300px;
+    font-size: 0.8em;
+    padding: 1em;
+    background: #ffffff;
+    border-radius: 2px;
+    border: 1px solid #a3b9d3;
+    top: 0;
+    left: calc(100% + 5px);
+}
+
 .checkbox{
     --width: 80px;
     --height: 28px;
@@ -104,6 +140,27 @@ input:checked ~ .checkbox:after{
     content: attr(text-on);
     left: calc(var(--width) / 2);
     color: #4973b3;
+}
+
+.feature-activation-button {
+    padding: 5px 10px;
+    appearance: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: inherit;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+.feature-activation-button[action=on] {
+    --bg-color: #c5f5ad;
+    --text-color: #1c5500;
+}
+
+.feature-activation-button[action=off] {
+    --bg-color: #ffd8d8;
+    --text-color: #a90000;
 }
 
 .copyright{

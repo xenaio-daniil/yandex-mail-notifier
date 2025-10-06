@@ -2,7 +2,7 @@
   "name": "__MSG_name__",
   "description": "__MSG_description__",
   "default_locale": "ru",
-  "version": "9.0.2",
+  "version": "9.0.3",
   "manifest_version": 3,
   "icons": {
     "128": "logo/chrome/mail_128.png",

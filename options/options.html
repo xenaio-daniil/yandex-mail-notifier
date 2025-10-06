@@ -7,11 +7,7 @@
 <body>
 <header class="header"><img class="logo" src="img.png">Настройки: Элементы Яндекса: Почта</header>
 <section class="settings">
-<!--    <div class="input-group">-->
-<!--        <input type="checkbox" name="mailto" id="mailto" class="visually-hidden" preference="mailtoHook">-->
-<!--        <label for="mailto" class="checkbox" text-off="нет" text-on="да"></label>-->
-<!--        <label for="mailto">Открывать ссылки «mailto:» в Яндекс.Почте</label>-->
-<!--    </div>-->
+    <h3>Настройки расширения</h3>
     <div class="input-group">
         <input type="checkbox" name="notifications" id="notifications" class="visually-hidden" preference="notifications">
         <label for="notifications" class="checkbox" text-off="нет" text-on="да"></label>
@@ -31,6 +27,14 @@
         <input type="checkbox" name="openPortal" id="openPortal" class="visually-hidden" preference="openPortal">
         <label for="openPortal" class="checkbox" text-off="нет" text-on="да"></label>
         <label for="openPortal">По нажатию на кнопку открывать страницу сервиса</label>
+    </div>
+    <h3>Функции браузера</h3>
+    <div class="input-group with-buttons" data-help="Позволяет зарегистрировать или отключить обработку mailto:">
+        <span>Открывать ссылки «mailto:» в Яндекс.Почте</span>
+        <div class="buttons">
+            <button class="feature-activation-button" feature="mailtoHook" action="on">Включить</button>
+            <button class="feature-activation-button" feature="mailtoHook" action="off">Выключить</button>
+        </div>
     </div>
 </section>
 <div class="copyright">Виджет для Яндекса: Почта<br>Версия 9.0 от 03.10.2025<br>© Xenaio
