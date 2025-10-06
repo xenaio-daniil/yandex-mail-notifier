@@ -78,6 +78,12 @@ export function listenToOption() {
             case "updateSettings":
                 settings.update(message.data.setting, message.data.value);
                 break;
+            case "getSettings":
+                settings.getSettings().then(settings=>{
+                    sendResponse(settings)
+                })
+                return true;
+                break;
             default:
                 break;
         }

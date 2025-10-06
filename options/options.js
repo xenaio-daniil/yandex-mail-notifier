@@ -1,10 +1,14 @@
 async function loadSettings(){
-    const settings = await chrome.storage.local.get("settings");
-    for(let setting in settings.settings){
+    const settings = await chrome.runtime.sendMessage({
+        "target":'background',
+        'action': "getSettings"
+    });
+
+    for(let setting in settings){
         let input = document.querySelector("[preference='"+setting+"']");
         if(!input) continue;
-        if(settings.settings[setting] === true || settings.settings[setting] === false){
-            input.checked = settings.settings[setting]
+        if(settings[setting] === true || settings[setting] === false){
+            input.checked = settings[setting]
         }
     }
 }
