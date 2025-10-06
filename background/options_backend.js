@@ -32,7 +32,7 @@ class Settings{
 
     async getSettings(setting){
         if(!this.__settings || Object.values(this.__settings).length === 0 || (setting && !(setting in this.__settings))) {
-            this.__settings = Object.assign({}, Settings.defaultSettings, await chrome.storage.local.get("settings").settings, this.__settings);
+            this.__settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings, this.__settings);
             chrome.storage.local.set({settings: this.__settings});
         }
         if(setting){
