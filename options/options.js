@@ -28,11 +28,9 @@ async function applyFeature(feature, value) {
     console.log(feature, value);
     switch (feature) {
         case "mailtoHook":
+            navigator.unregisterProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s')
             if(value === "on"){
                 navigator.registerProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s');
-            }
-            else{
-                navigator.unregisterProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s')
             }
             break;
     }
