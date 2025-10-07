@@ -96,7 +96,7 @@ export function listenToPopup() {
                 popup.loadMessages();
                 break;
             case "openMessage":
-                actions.openMessage(message.data.uid, message.data.mid, message.data.fid);
+                actions.openMessage(message.data.uid, message.data.mid);
                 break;
             case "changeAccount":
                 Accounts.changeAccount(message.data.uid);

@@ -63,13 +63,9 @@ export async function fetchYandexMailCounters() {
     }
 }
 
-export function openMessage(uid, mid, fid) {
-    let folder = "inbox"
-    if (typeof fid != "undefined" && fid !== 1) {
-        folder = "folder/" + fid
-    }
+export function openMessage(uid, mid) {
     chrome.tabs.create({
-        url: 'https://mail.yandex.ru/?uid=' + uid.toString() + '#' + folder + '/message/' + mid.toString()
+        url: 'https://mail.yandex.ru/message?uid=' + uid.toString() + '&ids=' + mid.toString()
     }, () => {
     });
 }
