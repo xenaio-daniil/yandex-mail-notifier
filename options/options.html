@@ -7,37 +7,76 @@
 <body>
 <header class="header"><img class="logo" src="img.png">Настройки: Элементы Яндекса: Почта</header>
 <section class="settings">
-    <h3>Настройки расширения</h3>
-    <div class="input-group">
-        <input type="checkbox" name="notifications" id="notifications" class="visually-hidden" preference="notifications">
-        <label for="notifications" class="checkbox" text-off="нет" text-on="да"></label>
-        <label for="notifications">Показывать уведомления о новых письмах</label>
+    <div class="settings-section">
+        <h3>Настройки почты</h3>
+        <div class="input-group">
+            <input type="checkbox" name="notifications" id="notifications" class="visually-hidden"
+                   preference="notifications">
+            <label for="notifications" class="checkbox" text-off="нет" text-on="да"></label>
+            <label for="notifications">Показывать уведомления о новых письмах</label>
+        </div>
+        <div class="input-group">
+            <input type="checkbox" name="playSound" id="playSound" class="visually-hidden" preference="playSound">
+            <label for="playSound" class="checkbox" text-off="нет" text-on="да"></label>
+            <label for="playSound">Проигрывать звуковые уведомления о новых письмах</label>
+        </div>
+        <div class="input-group">
+            <input type="checkbox" name="allAccountsCounter" id="allAccountsCounter" class="visually-hidden"
+                   preference="allAccountsCounter">
+            <label for="allAccountsCounter" class="checkbox" text-off="нет" text-on="да"></label>
+            <label for="allAccountsCounter">Показывать сумму входящих писем для всех авторизованных
+                пользователей</label>
+        </div>
+        <div class="input-group">
+            <input type="checkbox" name="openPortal" id="openPortal" class="visually-hidden" preference="openPortal">
+            <label for="openPortal" class="checkbox" text-off="нет" text-on="да"></label>
+            <label for="openPortal">По нажатию на кнопку открывать страницу сервиса</label>
+        </div>
     </div>
-    <div class="input-group">
-        <input type="checkbox" name="playSound" id="playSound" class="visually-hidden" preference="playSound">
-        <label for="playSound" class="checkbox" text-off="нет" text-on="да"></label>
-        <label for="playSound">Проигрывать звуковые уведомления о новых письмах</label>
+    <div class="settings-section">
+        <h3>Функции браузера</h3>
+        <div class="input-group with-buttons" data-help="Позволяет зарегистрировать или отключить обработку mailto:">
+            <span>Открывать ссылки «mailto:» в Яндекс.Почте</span>
+            <div class="buttons">
+                <button class="feature-activation-button" feature="mailtoHook" action="on">Включить</button>
+                <button class="feature-activation-button" feature="mailtoHook" action="off">Выключить</button>
+            </div>
+        </div>
     </div>
-    <div class="input-group">
-        <input type="checkbox" name="allAccountsCounter" id="allAccountsCounter" class="visually-hidden" preference="allAccountsCounter">
-        <label for="allAccountsCounter" class="checkbox" text-off="нет" text-on="да"></label>
-        <label for="allAccountsCounter">Показывать сумму входящих писем для всех авторизованных пользователей</label>
-    </div>
-    <div class="input-group">
-        <input type="checkbox" name="openPortal" id="openPortal" class="visually-hidden" preference="openPortal">
-        <label for="openPortal" class="checkbox" text-off="нет" text-on="да"></label>
-        <label for="openPortal">По нажатию на кнопку открывать страницу сервиса</label>
-    </div>
-    <h3>Функции браузера</h3>
-    <div class="input-group with-buttons" data-help="Позволяет зарегистрировать или отключить обработку mailto:">
-        <span>Открывать ссылки «mailto:» в Яндекс.Почте</span>
-        <div class="buttons">
-            <button class="feature-activation-button" feature="mailtoHook" action="on">Включить</button>
-            <button class="feature-activation-button" feature="mailtoHook" action="off">Выключить</button>
+    <div class="settings-section">
+        <h3>Расширение</h3>
+        <div class="input-group">
+            <input type="checkbox" name="updateRegularCheck" id="updateRegularCheck" class="visually-hidden"
+                   preference="updateRegularCheck">
+            <label for="updateRegularCheck" class="checkbox" text-off="нет" text-on="да"></label>
+            <label for="updateRegularCheck">Проверять обновления</label>
+            <button id="checkUpdate">Проверить</button>
+        </div>
+        <div id="newVersionInfo">
+        </div>
+        <div class="settings-section sub-section">
+            <div class="input-group">
+                <input type="checkbox" name="updateNotify" id="updateNotify" class="visually-hidden"
+                       preference="updateNotify">
+                <label for="updateNotify" class="checkbox" text-off="нет" text-on="да"></label>
+                <label for="updateNotify">Показывать уведомления</label>
+            </div>
+<!--            <div class="input-group">-->
+<!--                <input type="checkbox" name="updateInIcon" id="updateInIcon" class="visually-hidden"-->
+<!--                       preference="updateInIcon">-->
+<!--                <label for="updateInIcon" class="checkbox" text-off="нет" text-on="да"></label>-->
+<!--                <label for="updateInIcon">Показывать на иконке расширения</label>-->
+<!--            </div>-->
+            <div class="input-group">
+                <input type="checkbox" name="updateInPopup" id="updateInPopup" class="visually-hidden"
+                       preference="updateInPopup">
+                <label for="updateInPopup" class="checkbox" text-off="нет" text-on="да"></label>
+                <label for="updateInPopup">Показывать в окне расширения</label>
+            </div>
         </div>
     </div>
 </section>
-<div class="copyright">Виджет для Яндекса: Почта<br>Версия 9.0 от 03.10.2025<br>© Xenaio
+<div class="copyright">Виджет для Яндекса: Почта<br>Версия <span id="version"></span><br>© <a href="https://github.com/xenaio-daniil/yandex-mail-notifier/" target="_blank">Xenaio</a>
 </div>
 </body>
 <script src="options.js"></script>

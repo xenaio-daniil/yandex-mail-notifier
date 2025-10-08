@@ -7,6 +7,7 @@ import WebSocketConnection from "./WebSocketConnection.js";
 import Settings from "./options_backend.js";
 import * as StateController from "./state_controller.js";
 import State from "./state_controller.js";
+import version from "./versionController.js";
 
 export function openLoginPage() {
     chrome.tabs.create({"url":"https://passport.yandex.ru/auth?retpath=https%3A%2F%2Fmail.yandex.ru"});
@@ -124,6 +125,7 @@ export async function checkConnections() {
 
 export async function healthCheck() {
     fetchYandexMailCounters().then(()=>checkConnections())
+    version.checkUpdate()
 }
 
 export async function initialize() {

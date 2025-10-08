@@ -56,6 +56,9 @@ document.body.addEventListener('click', (e) => {
     if(e.target.closest("#settings")){
         openSettings();
     }
+    if(e.target.closest("#update")){
+        chrome.tabs.create({"url":"https://github.com/xenaio-daniil/yandex-mail-notifier/releases/latest"});
+    }
     if(e.target.closest("#login-new")){
         chrome.tabs.create({"url":"https://passport.yandex.ru/auth/list?login=&retpath=https%3A%2F%2Fmail.yandex.ru"});
     }

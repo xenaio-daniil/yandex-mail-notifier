@@ -15,6 +15,9 @@ function notificationClicked(notificationId){
             const uid = dataSplit[2];
             openMessage(uid, mid);
             break;
+        case 'new_version':
+            chrome.tabs.create({url: "https://github.com/xenaio-daniil/yandex-mail-notifier/releases/latest"})
+            break;
     }
 }
 

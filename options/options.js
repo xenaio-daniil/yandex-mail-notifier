@@ -13,6 +13,14 @@ async function loadSettings(){
     }
 }
 
+async function getCachedVersion(){
+    const newVersionInfo = await chrome.runtime.sendMessage({
+        "target":'background',
+        'action': "getCachedVersion"
+    })
+    handleNewVersionData(newVersionInfo);
+}
+
 function parseValueFromInput(input) {
     switch(input.type.toLowerCase()){
         case "checkbox":
@@ -25,7 +33,6 @@ function parseValueFromInput(input) {
 }
 
 async function applyFeature(feature, value) {
-    console.log(feature, value);
     switch (feature) {
         case "mailtoHook":
             navigator.unregisterProtocolHandler('mailto', 'https://mail.yandex.ru/#compose?mailto=%s')
@@ -42,7 +49,49 @@ document.querySelector(".settings").addEventListener("click", (e)=>{
         const button = e.target.closest(".feature-activation-button")
         applyFeature(button.getAttribute("feature"), button.getAttribute("action"))
     }
+    if(e.target.closest("#checkUpdate")){
+        e.preventDefault();
+        chrome.runtime.sendMessage({
+            "target":"background",
+            "action":"forceCheckUpdate"
+        })
+    }
 })
+
+function applyDependentSettings(setting, value) {
+    const dependentSettings = {};
+    switch (setting){
+        case "updateRegularCheck":
+            if(!value) {
+                for (let preference of ["updateNotify", "updateInPopup"]) {
+                    document.querySelector("[preference="+preference+"]").checked = false;
+                    dependentSettings[preference] = false;
+                }
+            }
+            break;
+        case "updateNotify":
+        case "updateInPopup":
+            if(value){
+                document.querySelector("[preference=updateRegularCheck]").checked = true;
+                dependentSettings["updateRegularCheck"] = true;
+            }
+            break;
+    }
+    return dependentSettings;
+}
+
+async function updateSetting(setting, value) {
+    let settings = {};
+    settings[setting] = value;
+    settings = Object.assign({}, settings, await applyDependentSettings(setting, value))
+    chrome.runtime.sendMessage({
+        "action":"updateSettings",
+        "target": "background",
+        "data":{
+            settings: settings
+        }
+    }).then(()=>loadSettings());
+}
 
 document.querySelector(".settings").addEventListener("change", (e)=>{
     let value;
@@ -58,15 +107,34 @@ document.querySelector(".settings").addEventListener("change", (e)=>{
             value = input.value
     }
     const setting = input.getAttribute("preference");
-    chrome.runtime.sendMessage({
-        "action":"updateSettings",
-        "target": "background",
-        "data":{
-            setting: setting,
-            value: value
-        }
-    })
+    updateSetting(setting, value)
+
+})
+
+function handleNewVersionData(newVersionInfo) {
+    const span = document.getElementById("newVersionInfo");
+    if(!newVersionInfo){
+        span.classList.remove("_exists");
+        span.innerHTML = "";
+        return;
+    }
+    span.classList.add("_exists");
+    let newVersionText = `Доступна новая версия ${newVersionInfo.tag_name}. 
+            <a href='https://github.com/xenaio-daniil/yandex-mail-notifier/releases/latest' target="_blank">Скачать</a>`
+    span.innerHTML = newVersionText;
+}
+
+chrome.runtime.onMessage.addListener((message)=>{
+    if(message.target !== "options") return;
+    switch(message.action){
+        case "newVersion":
+            handleNewVersionData(message.data)
+            break;
+    }
 })
 
 
 loadSettings()
+
+getCachedVersion()
+document.getElementById("version").innerText = chrome.runtime.getManifest().version

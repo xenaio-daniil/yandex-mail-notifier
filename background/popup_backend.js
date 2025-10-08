@@ -4,6 +4,8 @@ import * as actions from "./actions.js";
 import {openMessage} from "./actions.js";
 import * as State_controller from "./state_controller.js";
 import State from "./state_controller.js";
+import Settings from "./options_backend.js";
+import VersionController from "./versionController.js";
 
 class Popup {
 
@@ -119,6 +121,16 @@ export function listenToPopup() {
                 break;
             case "openSettings":
                 chrome.runtime.openOptionsPage();
+                break;
+            case "getCachedVersion_Popup":
+                Settings.getSettings("updateInPopup").then(flag=>{
+                    if(flag){
+                        return VersionController.cachedUpdateData();
+                    }
+                    else{
+                        return null;
+                    }
+                }).then((newVersionInfo)=>sendResponse(newVersionInfo));
                 break;
             default:
                 break;

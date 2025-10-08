@@ -273,16 +273,37 @@ function createBackgroundListener() {
                 }
                 break;
             case "showWarning":
-                console.log(message);
                 showWarning(message.data.message, message.data.showRefresh)
                 break;
+            case "newVersion":
+                handleNewVersionData(message.data);
+                break;
         }
+    })
+}
+
+function handleNewVersionData(newVersionInfo){
+    if(!newVersionInfo){
+        document.body.removeAttribute("has-update");
+    }
+    else{
+        document.body.setAttribute("has-update","");
+    }
+}
+
+function checkUpdate() {
+    chrome.runtime.sendMessage({
+        "target":"background",
+        "action":"getCachedVersion_Popup"
+    }).then(newVersionInfo=>{
+        handleNewVersionData(newVersionInfo)
     })
 }
 
 async function initialize(){
     createBackgroundListener()
     await loadHeaderInfo();
+    checkUpdate();
 }
 
 initialize();

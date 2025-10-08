@@ -1,11 +1,15 @@
 import * as Actions from "./actions.js";
+import VersionController from "./versionController.js";
 
 class Settings{
     static defaultSettings = {
         "notifications": true,
         "playSound": true,
         "allAccountsCounter": true,
-        "openPortal": false
+        "openPortal": false,
+        "updateRegularCheck": true,
+        "updateInPopup": true,
+        "updateNotify": false,
     };
     __settings;
 
@@ -19,12 +23,14 @@ class Settings{
         this.applyNewSettings()
     }
 
-    async update(setting, value){
+    async update(newSettings){
         const settings = Object.assign({}, Settings.defaultSettings, (await chrome.storage.local.get("settings")).settings);
-        if(!(setting in settings)) return;
-
-        chrome.storage.local.set({"settings": settings})
-        this.applyNewSettings(setting)
+        for(let setting in newSettings) {
+            if (!(setting in settings)) return false;
+            settings[setting] = newSettings[setting];
+        }
+        await chrome.storage.local.set({"settings": settings})
+        this.applyNewSettings(settings)
     }
 
     async getSettings(setting){
@@ -38,17 +44,29 @@ class Settings{
         }
     }
 
-    applyNewSettings(setting) {
-        if(!setting){
+    applyNewSettings(settings) {
+        if(!settings){
             this.applyOpenPortal()
         }
-        switch(setting){
-            case "allAccountsCounter":
-                Actions.fetchYandexMailCounters();
-                break;
-            case "openPortal":
-                this.applyOpenPortal();
-                break;
+        for(let setting in settings) {
+            switch (setting) {
+                case "allAccountsCounter":
+                    Actions.fetchYandexMailCounters();
+                    break;
+                case "openPortal":
+                    this.applyOpenPortal();
+                    break;
+                case "updateRegularCheck":
+                    this.getSettings("updateRegularCheck").then((value)=>{
+                        if(value){
+                            VersionController.checkUpdate();
+                        }
+                        else{
+                            VersionController.clearCached();
+                        }
+                    })
+                    break;
+            }
         }
     }
 
@@ -71,13 +89,21 @@ export function listenToOption() {
         if (message.target !== "background") return;
         switch (message.action) {
             case "updateSettings":
-                settings.update(message.data.setting, message.data.value);
+                settings.update(message.data.settings).then(()=>sendResponse());
+                return true;
                 break;
             case "getSettings":
                 settings.getSettings().then(settings=>{
                     sendResponse(settings)
                 })
                 return true;
+                break;
+            case "getCachedVersion":
+                VersionController.cachedUpdateData().then(data=>sendResponse(data));
+                return true;
+                break;
+            case "forceCheckUpdate":
+                VersionController.checkUpdate(true);
                 break;
             default:
                 break;

@@ -288,3 +288,16 @@ button#compose {
 #logout-total:hover{
     background: #ffe1e1;
 }
+
+[has-update] .update{
+    display: flex;
+    margin-bottom:-10px;
+}
+
+#update {
+    width: 100%;
+    text-align: center;
+    background: #FFC262;
+    color: #714814;
+    justify-content: center;
+}
