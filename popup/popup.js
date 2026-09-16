@@ -248,7 +248,7 @@ function showWarning(message, withRefresh) {
 }
 
 function createBackgroundListener() {
-    chrome.runtime.onMessage.addListener(async (message, sender) =>{
+    chrome.runtime.onMessage.addListener((message, sender) =>{
         if(message.target !== "popup") return;
         switch(message.action) {
             case "initialize":
